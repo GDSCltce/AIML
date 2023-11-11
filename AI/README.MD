@@ -11,7 +11,6 @@ Artificial Intelligence (AI) is an interdisciplinary field that aims to create i
 - **Intelligent Agents:** These are entities that perceive their environment and take actions to maximize the chances of achieving their goals.
 
 ## History of AI
-
 ### Historical Development
 
 AI has a rich history that spans several decades:
