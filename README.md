@@ -54,6 +54,10 @@ The DL folder is dedicated to the cutting-edge field of Deep Learning, focusing 
   
 - **Generative Adversarial Networks (GANs):** Explore the fascinating world of generating realistic data using GANs.
 
+### Comparison between Ai/ML/DL
+![image](https://github.com/DevJSter/AIML/assets/115056248/9a3ee7c1-3beb-4d57-96b0-b445a01264e4)
+
+
 ## Getting Started
 
 For beginners, we recommend starting with these foundational guides:
