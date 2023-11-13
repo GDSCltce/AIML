@@ -1,4 +1,4 @@
-# FreeCodeCamp - Building LLMs from Scratch
+# Building LLMs from Scratch
 
 ## Google Colab for those who don't have a GPU: https://colab.research.google.com/drive/1_7TNpEEl8xjHlr9JzKbK5AuDKXwAkHqj?usp=sharing
 
@@ -11,19 +11,6 @@ If you don't have an NVIDIA GPU, then the `device` parameter will default to `'c
 ## Visual Studio 2022 (for lzma compression algo) - https://visualstudio.microsoft.com/downloads/
 
 ## OpenWebText Download - https://skylion007.github.io/OpenWebTextCorpus/
-
-## Socials
-Twitter / X - https://twitter.com/elliotarledge
-
-My YouTube Channel - https://www.youtube.com/channel/UCjlt_l6MIdxi4KoxuMjhYxg
-
-How to SSH from Mac to Windows - https://www.youtube.com/watch?v=7hBeAb6WyIg&t=
-
-How to Setup Jupyter Notebooks in 5 minutes or less - https://www.youtube.com/watch?v=eLmweqU5VBA&t=
-
-Linkedin - https://www.linkedin.com/in/elliot-arledge-a392b7243/
-
-Join My Discord Server - https://discord.gg/pV7ByF9VNm
 
 ## Research Papers:
 Attention is All You Need - https://arxiv.org/pdf/1706.03762.pdf
