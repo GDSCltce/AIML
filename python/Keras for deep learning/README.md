@@ -252,4 +252,332 @@ The model is created using the Sequential API with three Dense layers. In the ne
 
 ![image](https://github.com/DevJSter/AIML/assets/115056248/980fc866-7cee-4d62-ad40-2edfd60f61a2)
 
+```python
+# Train an Artificial Neural Network with TensorFlow's Keras API
+
+## Import required modules
+
+```python
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Activation, Dense
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.metrics import categorical_crossentropy
+```
+
+Recall the previously built model:
+
+```python
+model = Sequential([
+    Dense(units=16, input_shape=(1,), activation='relu'),
+    Dense(units=32, activation='relu'),
+    Dense(units=2, activation='softmax')
+])
+```
+
+### Compiling The Model
+
+```python
+# Compile the model
+model.compile(optimizer=Adam(learning_rate=0.0001), loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+```
+
+- **Optimizer:** Adam with a learning rate of 0.0001.
+- **Loss:** sparse_categorical_crossentropy, suitable for integer-encoded labels.
+- **Metrics:** Accuracy is chosen for evaluation.
+
+### Training The Model
+
+```python
+# Train the model
+model.fit(x=scaled_train_samples, y=train_labels, batch_size=10, epochs=30, verbose=2)
+```
+
+- **Training Set:** `scaled_train_samples`
+- **Labels:** `train_labels`
+- **Batch Size:** 10
+- **Epochs:** 30
+- **Verbose:** 2 (detailed output)
+
+Training Output:
+
+```
+Train on 2100 samples
+Epoch 1/30
+2100/2100 - 1s - loss: 0.6288 - accuracy: 0.5662
+...
+Epoch 30/30
+2100/2100 - 0s - loss: 0.2476 - accuracy: 0.9414
+```
+
+The model steadily improves over the epochs, reaching an accuracy of almost 93% and reducing the loss to 0.27. Despite the simplicity of the model and data, we achieved good results quickly. In future episodes, we will explore more complex models and datasets.
+
+
+```python
+# Build a Validation Set with TensorFlow's Keras API
+
+## Import required modules
+
+```python
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Activation, Dense
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.metrics import categorical_crossentropy
+```
+
+### What Is A Validation Set?
+
+Recall the previously built model:
+
+```python
+model = Sequential([
+    Dense(units=16, input_shape=(1,), activation='relu'),
+    Dense(units=32, activation='relu'),
+    Dense(units=2, activation='softmax')
+])
+```
+
+Before training begins, let's discuss the addition of a validation set.
+
+### Creating A Validation Set
+
+#### Manually Create Validation Set
+
+```python
+# Manually create a validation set
+valid_set = (x_val, y_val)  # Numpy arrays or tensors
+model.fit(
+      x=scaled_train_samples
+    , y=train_labels
+    , validation_data=valid_set
+    , batch_size=10
+    , epochs=30
+    , verbose=2
+)
+```
+
+#### Create Validation Set With Keras
+
+```python
+# Create a validation set with Keras
+model.fit(
+      x=scaled_train_samples
+    , y=train_labels
+    , validation_split=0.1
+    , batch_size=10
+    , epochs=30
+    , verbose=2
+)
+```
+
+- **Validation Split:** A fractional number between 0 and 1. In this example, set to 0.1 (10%).
+
+### Interpret Validation Metrics
+
+During training, in addition to loss and accuracy, we will now also see `val_loss` and `val_acc` to track the loss and accuracy on the validation set.
+
+```python
+model.fit(
+      x=scaled_train_samples
+    , y=train_labels
+    , validation_split=0.1
+    , batch_size=10
+    , epochs=30
+    , verbose=2
+)
+```
+
+Training Output:
+
+```
+Epoch 1/30
+1890/1890 - 1s - loss: 0.6669 - accuracy: 0.5275 - val_loss: 0.6608 - val_accuracy: 0.5762
+...
+Epoch 30/30
+1890/1890 - 0s - loss: 0.2735 - accuracy: 0.9296 - val_loss: 0.2345 - val_accuracy: 0.9429
+```
+
+Now we can monitor how well the model generalizes to new, unseen data from the validation set, helping to detect overfitting and evaluate model performance.
+
+```python
+# Neural Network Predictions With TensorFlow's Keras API
+
+## Inference and Evaluating the Test Set
+
+### Creating The Test Set
+
+```python
+# Import required modules
+from random import randint
+import numpy as np
+from sklearn.utils import shuffle
+from sklearn.preprocessing import MinMaxScaler
+
+# Assuming previous code and imports are present
+
+# Create the test set
+test_labels = []
+test_samples = []
+
+for i in range(10):
+    # 5% of younger individuals who did experience side effects
+    random_younger = randint(13, 64)
+    test_samples.append(random_younger)
+    test_labels.append(1)
+
+    # 5% of older individuals who did not experience side effects
+    random_older = randint(65, 100)
+    test_samples.append(random_older)
+    test_labels.append(0)
+
+for i in range(200):
+    # 95% of younger individuals who did not experience side effects
+    random_younger = randint(13, 64)
+    test_samples.append(random_younger)
+    test_labels.append(0)
+
+    # 95% of older individuals who did experience side effects
+    random_older = randint(65, 100)
+    test_samples.append(random_older)
+    test_labels.append(1)
+
+test_labels = np.array(test_labels)
+test_samples = np.array(test_samples)
+test_labels, test_samples = shuffle(test_labels, test_samples)
+
+# Scale the test samples
+scaled_test_samples = scaler.fit_transform(test_samples.reshape(-1, 1))
+```
+![image](https://github.com/DevJSter/AIML/assets/115056248/116fc8c7-12a3-4677-8633-022e31f2b050)
+
+### Evaluating The Test Set
+
+```python
+# Get predictions from the model for the test set
+predictions = model.predict(
+      x=scaled_test_samples
+    , batch_size=10
+    , verbose=0
+)
+
+# Print out the predictions
+for i in predictions:
+    print(i)
+
+# Print out the most probable predictions
+rounded_predictions = np.argmax(predictions, axis=-1)
+for i in rounded_predictions:
+    print(i)
+```
+
+Each element in the `predictions` list is a probability distribution over all possible outputs. The first column contains the probability for each patient not experiencing side effects (0), and the second column contains the probability for each patient experiencing side effects (1).
+
+The `rounded_predictions` list contains the most probable prediction for each sample.
+
+Now, if you have corresponding labels for the test set, you can compare these true labels to the predicted labels to judge the accuracy of the model's evaluations.
+
+
+
+```python
+# Create A Confusion Matrix For Neural Network Predictions
+
+# Import required libraries
+%matplotlib inline
+from sklearn.metrics import confusion_matrix
+import itertools
+import matplotlib.pyplot as plt
+
+# Create the confusion matrix
+cm = confusion_matrix(y_true=test_labels, y_pred=rounded_predictions)
+
+# Function to plot the confusion matrix
+def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues):
+    """
+    This function prints and plots the confusion matrix.
+    Normalization can be applied by setting `normalize=True`.
+    """
+    plt.imshow(cm, interpolation='nearest', cmap=cmap)
+    plt.title(title)
+    plt.colorbar()
+    tick_marks = np.arange(len(classes))
+    plt.xticks(tick_marks, classes, rotation=45)
+    plt.yticks(tick_marks, classes)
+
+    if normalize:
+        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+        print("Normalized confusion matrix")
+    else:
+        print('Confusion matrix, without normalization')
+
+    print(cm)
+
+    thresh = cm.max() / 2.
+    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+        plt.text(j, i, cm[i, j],
+                 horizontalalignment="center",
+                 color="white" if cm[i, j] > thresh else "black")
+
+    plt.tight_layout()
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+
+# Define labels for the confusion matrix
+cm_plot_labels = ['no_side_effects', 'had_side_effects']
+
+# Plot the confusion matrix
+plot_confusion_matrix(cm=cm, classes=cm_plot_labels, title='Confusion Matrix')
+```
+
+This code includes the creation of the confusion matrix, a plotting function, and the visualization of the confusion matrix using the provided function. The confusion matrix helps to visually interpret how well the model is doing at its predictions and understand where it may need improvement.
+
+
+![image](https://github.com/DevJSter/AIML/assets/115056248/4d967e43-73cb-416c-b9bb-a166d44898eb)
+
+```python
+# Save And Load A Model With TensorFlow's Keras API
+
+# Saving And Loading The Model In Its Entirety
+
+# Save the model
+model.save('models/medical_trial_model.h5')
+
+# Load the saved model
+from tensorflow.keras.models import load_model
+new_model = load_model('models/medical_trial_model.h5')
+
+# Verify that the loaded model has the same architecture and weights
+new_model.summary()
+
+# Saving And Loading Only The Architecture Of The Model
+
+# Save only the architecture of the model as a JSON string
+json_string = model.to_json()
+
+# Print the JSON string
+print(json_string)
+
+# Load the model architecture from the JSON string
+from tensorflow.keras.models import model_from_json
+model_architecture = model_from_json(json_string)
+
+# Verify that the new model has the same architecture
+model_architecture.summary()
+
+# Saving And Loading The Weights Of The Model
+
+# Save only the weights of the model
+model.save_weights('models/my_model_weights.h5')
+
+# Load the saved weights into a new model with the same architecture
+model2 = Sequential([
+    Dense(units=16, input_shape=(1,), activation='relu'),
+    Dense(units=32, activation='relu'),
+    Dense(units=2, activation='softmax')
+])
+
+model2.load_weights('models/my_model_weights.h5')
+```
 
